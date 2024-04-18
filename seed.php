@@ -95,7 +95,7 @@ for ($i = 0; $i < 5; $i++) {
     $truncated_house = substr($house[$i], 0, 255); // Truncate house data if needed
 
     // SQL query to insert data without specifying studentid
-    $sql = "INSERT INTO `student` (`password`, `dob`, `firstname`, `lastname`, `house`, `town`, `county`, `country`, `postcode`)
+    $sql = "INSERT INTO `student` (`dob`, `firstname`, `lastname`, `house`, `town`, `county`, `country`, `postcode`)
     VALUES ('$date_of_birth', '$first_name', '$last_name', '$truncated_house', '$town', '', '$country', '$Postcode[$i]')"; 
 
     

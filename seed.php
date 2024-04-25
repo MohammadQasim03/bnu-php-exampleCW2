@@ -1,111 +1,106 @@
 <?php
-include("_includes/config.inc");
-include("_includes/dbconnect.inc");
-include("_includes/functions.inc");
 
-// Sample arrays
+require "_includes/config.inc";
+require "_includes/dbconnect.inc";
+require "_includes/functions.inc";
 
-$studentid = array(
-    "80000000",
-    "30000000",
-    "40000000",
-    "50000000",
-    "60000000",
-);
+$students = [
+    [
+        "studentid" => "22225432",
+        "password" => "jhytdcbn65",
+        "dob" => "1990/04/09",
+        "firstname" => "Munir",
+        "lastname" => "Gorsi",
+        "house" => "50",
+        "town" => "Slough",
+        "county" => "Berkshire",
+        "country" => "United Kingdom",
+        "postcode" => "SL1 1LM",
+    ],
+    [
+        "studentid" => "22213254",
+        "password" => "kocxrhmj09",
+        "dob" => "1996/09/04",
+        "firstname" => "Qasim",
+        "lastname" => "Matloob",
+        "house" => "1",
+        "town" => "Slough",
+        "county" => "Berkshire",
+        "country" => "United Kingdom",
+        "postcode" => "SL1 3KL",
+    ],
+    [
+        "studentid" => "22645928",
+        "password" => "dfrghuyb60",
+        "dob" => "1981/03/07",
+        "firstname" => "Jack",
+        "lastname" => "Jacob",
+        "house" => "7",
+        "town" => "Reading",
+        "county" => "Berkshire",
+        "country" => "United Kingdom",
+        "postcode" => "RG1 3QN",
+    ],
+    [
+        "studentid" => "22275678",
+        "password" => "qsuophcrf8",
+        "dob" => "2001/05/08",
+        "firstname" => "Alan",
+        "lastname" => "Parkinson",
+        "house" => "33",
+        "town" => "London",
+        "county" => "London",
+        "country" => "United Kingdom",
+        "postcode" => "NW10 9YT",
+    ],
+    [
+        "studentid" => "2226543",
+        "password" => "mqsxcght54",
+        "dob" => "1999/01/02",
+        "firstname" => "Kaleem",
+        "lastname" => "Karim",
+        "house" => "85",
+        "town" => "Windsor",
+        "county" => "Berkshire",
+        "country" => "United Kingdom",
+        "postcode" => "SL4 5GH",
+    ],
+];
 
-$first_names = array(
-    "Mohammad",
-    "Munir",
-    "Joyson",
-    "Keegan",
-    "Imaan"
-);
-
-$county = array(
-    "Bucks",
-    "Surry",
-    "Berkshire",
-    "Yorkshire",
-    "Hertfordshire",
-);
-$last_names = array(
-    "Matloob",
-    "Goris",
-    "Fernadas",
-    "Desouza",
-    "Majid"
-);
-
-$countries = array(
-    "USA",
-    "Canada",
-    "UK",
-    "Australia",
-    "Germany"
-);
-
-$birth_dates = array(
-    "1995-01-15",
-    "1998-05-20",
-    "1992-09-10",
-    "1997-11-25",
-    "1990-03-05"
-);
-
-$towns = array(
-    "Slough",
-    "Bucks",
-    "Nottingham",
-    "Plymouth",
-    "London",
-);
-
-// $ages = array(
-//     "27",
-//     "24",
-//     "29",
-//     "22",
-//     "32"
-// );
-
-$house = array(
-    "20 high street",
-    "40 High Wycombe Street",
-    "60 Manchestor High Light Street",
-    "55 Nottingham Chalvey Street",
-    "100 Reading Clive Road"
-);
-
-$Postcode = array(
-    "SL1 2SQ",
-    "ENG 5TH",
-    "RD1 3PQ",
-    "MK1 5TF",
-    "LNK 9H0"
-); 
-// Insert data into database
-for ($i = 0; $i < 5; $i++) {
-    $student_id = $studentid[$i]; 
-    $first_name = $first_names[$i];
-    $last_name = $last_names[$i];
-    $country = $countries[$i];
-    $date_of_birth = $dates_of_birth[$i];
-    $town = $towns[$i];
-    // $age = $ages[$i];
-    $truncated_house = substr($house[$i], 0, 255); // Truncate house data if needed
-
-    // SQL query to insert data without specifying studentid
-    $sql = "INSERT INTO `student` (`dob`, `firstname`, `lastname`, `house`, `town`, `county`, `country`, `postcode`)
-    VALUES ('$date_of_birth', '$first_name', '$last_name', '$truncated_house', '$town', '', '$country', '$Postcode[$i]')"; 
-
-    
-
-    $result = mysqli_query($conn, $sql); // Execute SQL query
-
-    if (!$result) {
-        echo "Error inserting record: " . mysqli_error($conn) . "\n"; // Output error if insertion fails
-    } else {
-        echo "Record inserted successfully\n"; // Output success message if insertion is successful
+// Check if the user is logged in
+if (isset($_SESSION['id'])) {
+    // Loop through each student and insert into the database
+    foreach ($students as $student_array) {
+        // Extracting values from the student array
+        $studentid = mysqli_real_escape_string($conn, $student_array['studentid']);
+        $password = mysqli_real_escape_string($conn, password_hash($student_array['password'], PASSWORD_DEFAULT));
+        $dob = mysqli_real_escape_string($conn, $student_array['dob']);
+        $firstname = mysqli_real_escape_string($conn, $student_array['firstname']);
+        $lastname = mysqli_real_escape_string($conn, $student_array['lastname']);
+        $house = mysqli_real_escape_string($conn, $student_array['house']);
+        $town = mysqli_real_escape_string($conn, $student_array['town']);
+        $county = mysqli_real_escape_string($conn, $student_array['county']);
+        $country = mysqli_real_escape_string($conn, $student_array['country']);
+        $postcode = mysqli_real_escape_string($conn, $student_array['postcode']);
+     
+        // Building the SQL query
+        $sql = "INSERT INTO student (studentid, password, dob, firstname, lastname, house, town, county, country, postcode)
+                VALUES ('$studentid','$password','$dob','$firstname', '$lastname', '$house', '$town', '$county', '$country', '$postcode')";
+     
+        $result = mysqli_query($conn, $sql);
+     
+        // Checking if the query was successful
+        if ($result) {
+            echo "Record inserted successfully for student with ID: $studentid<br>";
+        } else {
+            echo "Error inserting record: " . mysqli_error($conn) . "<br>";
+        }
     }
+} else {
+    // Redirect to index.php if not logged in
+    header("Location: index.php");
+    exit();
 }
+
+?>
 

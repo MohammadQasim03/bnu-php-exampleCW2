@@ -2,6 +2,7 @@ CREATE TABLE `module` (
   `modulecode` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
   `level` int(11) NOT NULL
+  PRIMARY KEY ('modulecode')
 );
 
 CREATE TABLE `student` (
@@ -15,11 +16,15 @@ CREATE TABLE `student` (
   `county` varchar(30) NOT NULL,
   `country` varchar(30) NOT NULL,
   `postcode` varchar(10) NOT NULL
+  `image` LONGBLOB,
+  PRIMARY KEY ('studentid') 
+
 );
 
 CREATE TABLE `studentmodules` (
   `studentid` varchar(8) NOT NULL,
   `modulecode` varchar(10) NOT NULL
+  PRIMARY KEY ('studentid', 'modulecode')
 );
 
 INSERT INTO `studentmodules` (`studentid`, `modulecode`) VALUES

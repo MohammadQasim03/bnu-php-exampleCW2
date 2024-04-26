@@ -10,26 +10,6 @@ if (isset($_SESSION['id'])) {
     echo template("templates/partials/header.php");
     echo template("templates/partials/nav.php");
 
-    // Handle file upload
-    if(isset($_FILES['student_image'])) {
-        $upload_directory = "uploads/"; // Directory to store uploaded files
-        
-        // Loop through each uploaded file
-        foreach($_FILES['student_image']['tmp_name'] as $key => $tmp_name) {
-            $file_name = $_FILES['student_image']['name'][$key];
-            $file_tmp = $_FILES['student_image']['tmp_name'][$key];
-            
-            // Move the uploaded file to the designated directory
-            move_uploaded_file($file_tmp, $upload_directory . $file_name);
-            
-            // Update the database with the file path for each student
-            $student_id = $_POST['student_id'][$key];
-            $image = $upload_directory . $student_id . ".jpg"; // Assuming JPEG format
-            $update_sql = "UPDATE student SET image_path='$image' WHERE studentid='$student_id'";
-            mysqli_query($conn, $update_sql);
-        }
-    }
-
     // Fetch student details from the database
     $sql = "SELECT *, studentid AS id FROM student";
     $result = mysqli_query($conn, $sql);
@@ -38,7 +18,9 @@ if (isset($_SESSION['id'])) {
     $data['content'] .= "<div style='background-color: #f8f9fa; padding: 20px;'>";
 
     // Start form
-    $data['content'] .= "<form action='deletestudent.php' method='POST' onsubmit=\"return confirm('Do you really want to submit the form?');\" enctype='multipart/form-data'>";
+    $data['content'] .= "<form action='deletestudent.php' method='POST' 
+    onsubmit=\"return confirm('Do you really want to submit the form?');\" 
+    enctype='multipart/form-data'>";
 
     // Table headers
     $data['content'] .= "<h1 class='my-4'>Student Details</h1>";
@@ -62,7 +44,16 @@ if (isset($_SESSION['id'])) {
         $data['content'] .= "<td>{$row["county"]}</td>";
         $data['content'] .= "<td>{$row["country"]}</td>";
         $data['content'] .= "<td>{$row["postcode"]}</td>";
-        $data['content'] .= " <td><img src='studentimage.php?id=$row[studentid]' height='100' width='100'  </td>";
+        
+        // Check if image data is not null before encoding
+        if ($row["photo"] !== null) {
+            // Display image stored as BLOB data
+            $imageData = base64_encode($row["photo"]);
+            $data['content'] .= "<td><img src='data:image/jpeg;base64,{$imageData}' alt='Student Image' style='max-width: 100px; max-height: 100px;'></td>";
+        } else {
+            $data['content'] .= "<td>No Image</td>"; // Display placeholder if no image data
+        }
+
         $data['content'] .= "<td><input type='checkbox' name='students[]' value='{$row["studentid"]}' /></td>";
         $data['content'] .= "</tr>";
     }

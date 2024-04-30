@@ -15,7 +15,7 @@ if (isset($_SESSION['id'])) {
    if ($_SERVER["REQUEST_METHOD"] == "POST") {
       // Validate form inputs (you can add more validation as needed)
       if (empty($_POST['password'])) {
-         echo "Password is required.";
+         echo "Please enter the password.";
       } else {
          // Hash the password
          $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -62,6 +62,7 @@ if (isset($_SESSION['id'])) {
                <div class="form-group">
                   <label for="password">Password:</label>
                   <input id="password" name="password" type="password" class="form-control" required />
+                  <div class="invalid-feedback">Please enter the password.</div>
                </div>
                <div class="form-group">
                   <label for="dob">Date of Birth:</label>

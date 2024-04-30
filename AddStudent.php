@@ -20,10 +20,12 @@ if (isset($_SESSION['id'])) {
          // Hash the password
          $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
+        
+
          // Extract form data
          $date_of_birth = $_POST['dob'];
-         $first_name = $_POST['firstname'];
-         $last_name = $_POST['lastname'];
+         $first_name =  mysqli_real_escape_string($conn,$_POST['firstname']);
+         $last_name = mysqli_real_escape_string($conn,$_POST['lastname']);
          $house = $_POST['house'];
          $town = $_POST['town'];
          $county = $_POST['county'];
@@ -66,7 +68,7 @@ if (isset($_SESSION['id'])) {
                </div>
                <div class="form-group">
                   <label for="dob">Date of Birth:</label>
-                  <input id="dob" name="dob" type="date" class="form-control" />
+                  <input id="dob" name="dob" type="date" class="form-control" required />
                </div>
                <div class="form-group">
                   <label for="firstname">First Name:</label>
@@ -82,15 +84,15 @@ if (isset($_SESSION['id'])) {
                </div>
                <div class="form-group">
                   <label for="town">Town:</label>
-                  <input id="town" name="town" type="text" class="form-control" />
+                  <input id="town" name="town" type="text" class="form-control" required />
                </div>
                <div class="form-group">
                   <label for="county">County:</label>
-                  <input id="county" name="county" type="text" class="form-control" />
+                  <input id="county" name="county" type="text" class="form-control" required/>
                </div>
                <div class="form-group">
                   <label for="country">Country:</label>
-                  <input id="country" name="country" type="text" class="form-control" />
+                  <input id="country" name="country" type="text" class="form-control" required />
                </div>
                <div class="form-group">
                   <label for="postcode">Postcode:</label>

@@ -37,7 +37,7 @@ if (isset($_SESSION['id'])) {
             <form name="frmdetails" action="" method="post">
                 <div class="mb-3">
                     <label for="txtfirstname" class="form-label">First Name:</label>
-                    <input name="txtfirstname" type="text" class="form-control" value="{$row['firstname']}" required>
+                    <input name="txtfirstname" type="text" class="form-control" value="{$row['firstname']}"     >
                 </div>
                 <div class="mb-3">
                     <label for="txtlastname" class="form-label">Surname:</label>
